@@ -1,0 +1,12 @@
+hash: 5a631c78347851264ac09cb4a104a4ccfce28040648e62488114f0334a3674b8
+updated: 2017-03-18T19:06:03.647135972-06:00
+imports:
+- name: github.com/gorilla/context
+  version: 1ea25387ff6f684839d82767c1733ff4d4d15d0a
+- name: github.com/gorilla/handlers
+  version: ee54c7b44cab12289237fb8631314790076e728b
+- name: github.com/gorilla/mux
+  version: 0eeaf8392f5b04950925b8a69fe70f110fa7cbfc
+- name: github.com/Sirupsen/logrus
+  version: 3ec0642a7fb6488f65b06f9040adc67e3990296a
+testImports: []

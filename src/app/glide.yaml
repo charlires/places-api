@@ -1,0 +1,7 @@
+package: app 
+import:
+- package: github.com/Sirupsen/logrus
+- package: github.com/gorilla/mux
+- package: github.com/gorilla/handlers
+- package: github.com/gorilla/context
+  version: ^1.0.0
