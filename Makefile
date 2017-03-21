@@ -11,15 +11,7 @@ LDFLAGS = "-X main.buildSha='$(BUILD_SHA)'"
 
 clean:
 	@echo '::clean'
-	@rm -rf bin pkg package coverage
-
-init: clean
-	@echo '::init';
-	@mkdir $(PROJECT_ROOT)/bin;
-
-build: init
-	@echo '::build';
-	cd $(PROJECT_ROOT)/src/$(PROJECT_NAME) && go build -o $(PROJECT_ROOT)/bin/$(BIN_NAME) -ldflags=$(LDFLAGS) $(BIN_NAME);
+	@rm -rf bin pkg package
 
 glide/clean:
 	@echo '::glide/clean';
@@ -29,11 +21,24 @@ glide/setup: glide/clean
 	@echo '::glide/setup';
 	@cd $(PROJECT_ROOT)/build && bash glide_setup.sh;
 
-deps: glide/setup
-	@echo '::deps';
+glide/install: glide/setup
+	@echo '::glide/install';
 	cd $(PROJECT_ROOT)/src/$(PROJECT_NAME) && GIT_SSL_NO_VERIFY=1 $(PROJECT_ROOT)/build/glide install;
 
-run: deps build
+compile: 
+	@echo '::compile'
+	@mkdir $(PROJECT_ROOT)/bin;
+	cd $(PROJECT_ROOT)/src/$(PROJECT_NAME) && go build -o $(PROJECT_ROOT)/bin/$(BIN_NAME) -ldflags=$(LDFLAGS) $(BIN_NAME);
+
+build: glide/install clean compile
+	@echo '::done-build';
+
+package: vendor/clean build
+	@echo '::package';
+	@mkdir package;
+	@cp -r bin package;
+
+run: clean compile
 	@echo '::run'
 	@$(PROJECT_ROOT)/bin/$(BIN_NAME) --config=dev_config;
 
@@ -44,8 +49,6 @@ vendor/clean:
 test/unit:
 	@echo '::test/unit';
 	@cd $(PROJECT_ROOT)/src/$(PROJECT_NAME) && go test -run=Unit -timeout=10s $(GOLIST) || exit 1;
-
-test: vendor/clean deps test/unit
 
 # glide/get: glide/setup
 # 	@echo '::glide/get-$(GLIDE_PKG)';
