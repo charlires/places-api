@@ -1,7 +1,9 @@
-package: app 
+package: app
 import:
 - package: github.com/Sirupsen/logrus
 - package: github.com/gorilla/mux
 - package: github.com/gorilla/handlers
 - package: github.com/gorilla/context
+- package: github.com/spf13/viper
+- package: github.com/codegangsta/cli
   version: ^1.0.0
