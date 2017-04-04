@@ -12,7 +12,7 @@ import (
 
 	"github.com/Sirupsen/logrus"
 	"github.com/codegangsta/cli"
-	//"github.com/gorilla/mux"
+	"github.com/gorilla/mux"
 	"github.com/spf13/viper"
 )
 
@@ -71,18 +71,15 @@ func main() {
 			"log_level": logLevel,
 		}).Info("set log level")
 
-		//r := mux.NewRouter()
 		// Routes consist of a path and a handler function.
-		//r.HandleFunc("/", handler.TestHandler)
-		mux := http.NewServeMux()
-		mux.Handle("/", handler.DemoController{})
-
+		r := mux.NewRouter()
+		setUpRouter(r)
 		// Bind to a port and pass our router in
 		httpPort := fmt.Sprintf(":%s", viper.GetString("port"))
 		logrus.WithFields(logrus.Fields{
 			"httpPort": httpPort,
 		}).Info("starting http server")
-		if err := http.ListenAndServe(httpPort, mux); err != nil {
+		if err := http.ListenAndServe(httpPort, r); err != nil {
 			logrus.WithFields(logrus.Fields{
 				"error": err,
 			}).Fatal("unable to start http server")
@@ -92,5 +89,10 @@ func main() {
 	}
 
 	app.Run(os.Args)
+
+}
+
+func setUpRouter(r *mux.Router) {
+	r.Handle("/", handler.DemoController{})
 
 }

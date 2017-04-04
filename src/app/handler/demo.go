@@ -8,5 +8,6 @@ type DemoController struct {
 }
 
 func (t DemoController) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Ok!"))
+	w.Header().Set("Content-Type", "application/json")
+	w.Write([]byte("{\"status\":\"Ok!\"}"))
 }
